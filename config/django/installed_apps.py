@@ -10,10 +10,12 @@ class InstalledAppsSettings(BaseSettings):
         "rest_framework",
         "rangefilter",
         "drf_spectacular",
+        "widget_tweaks",
     ]
 
     LOCAL_APPS: list[str] = [
         "apps.user.apps.UserConfig",
+        "apps.endpoint.apps.EndpointConfig",
     ]
 
     INSTALLED_APPS: list[str] = [

@@ -1,12 +1,13 @@
 from typing import Any
 from pydantic_settings import BaseSettings
+from config.django.general import general_config
 
 
 class TemplateSettings(BaseSettings):
     TEMPLATES: list[dict[str, Any]] = [
         {
             "BACKEND": "django.template.backends.django.DjangoTemplates",
-            "DIRS": [],
+            "DIRS": [general_config.BASE_DIR / "templates"],
             "APP_DIRS": True,
             "OPTIONS": {
                 "context_processors": [

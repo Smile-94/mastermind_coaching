@@ -1,7 +1,7 @@
 from pydantic_settings import BaseSettings
 
 AUTHENTICATION_BACKENDS = [
-    "apps.user.backends.MyAuthBackend",
+    "backend.backend.MyAuthBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
 
@@ -11,7 +11,7 @@ class AuthSettings(BaseSettings):
     AUTH_USER_MODEL: str = "user.User"
 
     AUTHENTICATION_BACKENDS: list[str] = [
-        "backends.MyAuthBackend",
+        "backend.backend.MyAuthBackend",
         "django.contrib.auth.backends.ModelBackend",
     ]
 
