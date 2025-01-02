@@ -44,8 +44,8 @@ class UserLoginView(View):
                     redirect_url = request.POST.get("next")
                     return redirect(redirect_url)
                 else:
-                    # return HttpResponseRedirect(reverse("visitor:visitor_home"))
-                    return HttpResponse("We are working on Admin Panel")
+                    messages.success(request, "Welcome to your user panel")
+                    return HttpResponseRedirect(reverse("authority:authority_home"))
 
             elif user is not None and request_user.user_type == UserTypeChoice.STUDENT:
                 login(request, user)

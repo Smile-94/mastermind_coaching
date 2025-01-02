@@ -16,6 +16,8 @@ class InstalledAppsSettings(BaseSettings):
     LOCAL_APPS: list[str] = [
         "apps.user.apps.UserConfig",
         "apps.endpoint.apps.EndpointConfig",
+        "apps.teacher.apps.TeacherConfig",
+        "apps.authority.apps.AuthorityConfig",
     ]
 
     INSTALLED_APPS: list[str] = [
