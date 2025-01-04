@@ -20,3 +20,15 @@ class TeacherProfileForm(ModelForm):
     class Meta:
         model = TeacherProfile
         exclude = ("profile_of",)
+
+
+class TeacherAddressForm(ModelForm):
+    class Meta:
+        model = Address
+        exclude = ("address_of",)
+
+
+class TeacherEducationForm(ModelForm):
+    class Meta:
+        model = EducationalQualification
+        exclude = ("teacher",)

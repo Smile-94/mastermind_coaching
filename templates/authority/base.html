@@ -61,7 +61,7 @@
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa-solid fa-user"></i>Teacher</a>
               <div class="dropdown-menu bg-transparent border-0">
                 <a href="{% url 'authority:add_teacher' %}" class="dropdown-item"><i class="fa-solid fa-plus me-2"></i>Add Teacher</a>
-                <a href="typography.html" class="dropdown-item"><i class="fa-solid fa-list me-2"></i>Teacher List</a>
+                <a href="{% url 'authority:teacher_list' %}" class="dropdown-item"><i class="fa-solid fa-list me-2"></i>Teacher List</a>
                 <a href="element.html" class="dropdown-item">Other Elements</a>
               </div>
             </div>
@@ -113,12 +113,13 @@
             
         {% endfor %}
         {% endif %}
-
+        <div class="container-fluid pt-4 px-4">
         {% block body %}
           <h1>Hello World</h1>
         {% endblock %}
+        </div>
 
-        <!-- Footer Start -->
+        {% comment %} <!-- Footer Start -->
         <div class="container-fluid pt-4 px-4">
           <div class="bg-light rounded-top p-4">
             <div class="row">
@@ -132,7 +133,7 @@
             </div>
           </div>
         </div>
-        <!-- Footer End -->
+        <!-- Footer End --> {% endcomment %}
       </div>
       <!-- Content End -->
 

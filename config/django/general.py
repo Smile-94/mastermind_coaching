@@ -21,6 +21,7 @@ class GeneralSettings(BaseSettings):
     # Messages Setting
 
     MESSAGE_TAGS: dict = Field(default={messages.ERROR: "danger"})
+    LOGIN_URL: Path = "login/"
 
 
 general_config = GeneralSettings()

@@ -48,6 +48,7 @@ class TeacherProfile(DjangoBaseModel):
         blank=True,
     )
     nationality = CharField(max_length=100, null=True, blank=True)
+    nid_no = CharField(max_length=100, blank=True, null=True, unique=True)
     profile_picture = ImageField(upload_to="teacher_profiles/", null=True, blank=True)
     marital_status = CharField(
         max_length=15,
@@ -90,7 +91,7 @@ class Address(DjangoBaseModel):
 
 
 class EducationalQualification(DjangoBaseModel):
-    teacher = ForeignKey(User, on_delete=CASCADE, related_name="qualifications")
+    teacher = OneToOneField(User, on_delete=CASCADE, related_name="qualifications")
     degree = CharField(max_length=200)  # e.g., B.Ed., M.Ed., Ph.D.
     institution = CharField(max_length=255)  # Name of the university or institution
     passing_year = PositiveBigIntegerField(default=2024)
@@ -105,7 +106,7 @@ class EducationalQualification(DjangoBaseModel):
         verbose_name_plural = _("Educational Qualification")
 
     def __str__(self):
-        if self.profile_of.name:
-            return f"{self.profile_of.name} {self.degree}'s"
+        if self.teacher.name:
+            return f"{self.teacher.name} {self.degree}'s"
         else:
-            return f"{self.profile_of.username} {self.degree}'s"
+            return f"{self.teacher.username} {self.degree}'s"

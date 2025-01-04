@@ -10,4 +10,5 @@ app_name = "accounts"
 
 urlpatterns = [
     path("login/", UserLoginView.as_view(), name="login"),
+    path("", UserLoginView.as_view(), name="login"),
 ]

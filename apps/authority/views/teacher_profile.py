@@ -11,6 +11,7 @@ from apps.authority.permission.admin_permission import AdminPassesTestMixin
 
 # class Based View
 from django.views.generic import CreateView
+from django.views.generic import ListView
 from django.views.generic import UpdateView
 from django.views.generic import DetailView
 from django.views.generic import DeleteView
@@ -26,14 +27,19 @@ from common.models import UserTypeChoice
 
 # forms
 from apps.user.forms.signup_form import SignUpForm
-from apps.teacher.form.profile_form import TeacherProfileForm
+from apps.user.forms.update_form import UpdateUserForm
+from apps.teacher.form.profile_form import (
+    TeacherProfileForm,
+    TeacherAddressForm,
+    TeacherEducationForm,
+)
 # from accounts.forms import ProfileForm
 # from accounts.forms import PresentAddressForm
 # from accounts.forms import PermanentAddressForm
 # from employee.forms import EmployeeInfoForm
 
 # Filters
-# from accounts.filters import UserFilter
+from apps.authority.filters.user_filter import UserFilter
 
 
 class AddTeacherView(LoginRequiredMixin, AdminPassesTestMixin, CreateView):
@@ -63,118 +69,195 @@ class AddTeacherView(LoginRequiredMixin, AdminPassesTestMixin, CreateView):
         return super().form_invalid(form)
 
 
-# class EmployeeDetailView(LoginRequiredMixin, AdminPassesTestMixin, DetailView):
-#     model = User
-#     context_object_name = "employee"
-#     template_name = "authority/employee_details.html"
+class TeacherListView(LoginRequiredMixin, AdminPassesTestMixin, ListView):
+    model = User
+    queryset = User.objects.filter(
+        user_type=UserTypeChoice.TEACHER, is_active=True
+    ).order_by("-id")
+    filterset_class = UserFilter
+    template_name = "authority/teacher_list.html"
 
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["title"] = "Employee Details"
-#         return context
-
-
-# class AddEmployeeInfoView(LoginRequiredMixin, AdminPassesTestMixin, UpdateView):
-#     model = User
-#     model2 = EmployeeInfo
-#     form_class = ProfileForm
-#     form_class2 = EmployeeInfoForm
-#     template_name = "authority/add_employee_info.html"
-#     success_url = reverse_lazy("authority:add_employee")
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         try:
-#             user_object = User.objects.get(id=self.kwargs.get("pk"))
-#             print(user_object)
-#             context["title"] = "Add/Edit Employee Inof"
-#             context["form"] = self.form_class(instance=user_object.profile)
-#             context["form2"] = self.form_class2(instance=user_object.employee_info)
-
-#         except Exception as e:
-#             print(e)
-#         return context
-
-#     def post(self, request, *args, **kwargs):
-#         user_object = User.objects.get(id=self.kwargs.get("pk"))
-#         form = self.form_class(
-#             request.POST, request.FILES, instance=user_object.profile
-#         )
-#         form2 = self.form_class2(
-#             request.POST, request.FILES, instance=user_object.employee_info
-#         )
-#         return self.form_valid(form, form2)
-
-#     def form_valid(self, form, form2):
-#         try:
-#             if form.is_valid() and form2.is_valid():
-#                 user = form.save(commit=False)
-#                 info = form2.save(commit=False)
-#                 user.profile = User.objects.get(id=self.kwargs.get("pk"))
-#                 info.info_of = User.objects.get(id=self.kwargs.get("pk"))
-#                 user.save()
-#                 info.save()
-#                 messages.success(self.request, "Employee Info Updated Successfully")
-#             return super().form_valid(form)
-
-#         except Exception as e:
-#             print(e)
-#             return super().form_invalid(form)
-
-#     def form_invalid(self, form):
-#         messages.error(self.request, "Some thing wrong try again")
-#         return super().form_invalid(form)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Teacher List"
+        context["users"] = self.filterset_class(
+            self.request.GET, queryset=self.queryset
+        )
+        return context
 
 
-# class AddEmployeeAddressView(LoginRequiredMixin, AdminPassesTestMixin, UpdateView):
-#     model = User
-#     model2 = PresentAddress
-#     form_class = PresentAddressForm
-#     form_class2 = PermanentAddressForm
-#     template_name = "authority/add_employee_address.html"
-#     success_url = reverse_lazy("authority:add_employee")
+class TeacherDetailView(LoginRequiredMixin, AdminPassesTestMixin, DetailView):
+    model = User
+    context_object_name = "user"
+    template_name = "authority/teacher_details.html"
 
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         try:
-#             user_object = User.objects.get(id=self.kwargs.get("pk"))
-#             print(user_object)
-#             context["title"] = "Add/Edit Employee Inof"
-#             context["form"] = self.form_class(instance=user_object.present_address)
-#             context["form2"] = self.form_class2(instance=user_object.permanent_address)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Teacher Details"
+        return context
 
-#         except Exception as e:
-#             print(e)
-#         return context
 
-#     def post(self, request, *args, **kwargs):
-#         user_object = User.objects.get(id=self.kwargs.get("pk"))
-#         form = self.form_class(
-#             request.POST, request.FILES, instance=user_object.present_address
-#         )
-#         form2 = self.form_class2(
-#             request.POST, request.FILES, instance=user_object.permanent_address
-#         )
-#         return self.form_valid(form, form2)
+class AddUpdateTeacherInfoView(LoginRequiredMixin, AdminPassesTestMixin, UpdateView):
+    model = User
+    form_class = TeacherProfileForm
+    form_class2 = TeacherAddressForm
+    template_name = "authority/add_teacher_info.html"
+    success_url = reverse_lazy("authority:teacher_list")
 
-#     def form_valid(self, form, form2):
-#         try:
-#             if form.is_valid() and form2.is_valid():
-#                 present_address = form.save(commit=False)
-#                 parmanent_address = form2.save(commit=False)
-#                 present_address.address_of = User.objects.get(id=self.kwargs.get("pk"))
-#                 parmanent_address.address_of = User.objects.get(
-#                     id=self.kwargs.get("pk")
-#                 )
-#                 present_address.save()
-#                 parmanent_address.save()
-#                 messages.success(self.request, "Employee Info Updated Successfully")
-#             return super().form_valid(form)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            user_object = User.objects.get(id=self.kwargs.get("pk"))
+            teacher_profile = TeacherProfile.objects.get_or_create(
+                profile_of=user_object
+            )
+            teacher_address = Address.objects.get_or_create(address_of=user_object)
+            context["title"] = "Add/Edit Employee Info"
+            if teacher_profile:
+                context["form"] = self.form_class(instance=user_object.teacher_profile)
+            else:
+                context["form"] = self.form_class()
 
-#         except Exception as e:
-#             print(e)
-#             return super().form_invalid(form)
+            if teacher_address:
+                context["form2"] = self.form_class2(
+                    instance=user_object.teacher_address
+                )
 
-#     def form_invalid(self, form):
-#         messages.error(self.request, "Some thing wrong try again")
-#         return super().form_invalid(form)
+            else:
+                context["form2"] = self.form_class2()
+        except Exception as e:
+            print(e)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        user_object = User.objects.get(id=self.kwargs.get("pk"))
+        form = self.form_class(
+            request.POST, request.FILES, instance=user_object.teacher_profile
+        )
+        form2 = self.form_class2(request.POST, instance=user_object.teacher_address)
+        return self.form_valid(form, form2)
+
+    def form_valid(self, form, form2):
+        try:
+            if form.is_valid() and form2.is_valid():
+                user = form.save(commit=False)
+                info = form2.save(commit=False)
+                user.profile_of = User.objects.get(id=self.kwargs.get("pk"))
+                info.address_of = User.objects.get(id=self.kwargs.get("pk"))
+                user.save()
+                info.save()
+                messages.success(self.request, "Employee Info Updated Successfully")
+            return super().form_valid(form)
+
+        except Exception as e:
+            print(e)
+            return super().form_invalid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, "Some thing wrong try again")
+        return super().form_invalid(form)
+
+
+class UpdateTeacherView(LoginRequiredMixin, AdminPassesTestMixin, UpdateView):
+    model = User
+    form_class = UpdateUserForm
+    template_name = "authority/update_teacher.html"
+    success_url = reverse_lazy("authority:teacher_list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            user_object = User.objects.get(id=self.kwargs.get("pk"))
+
+            context["title"] = "Add/Edit Teacher Account Info"
+            context["form"] = self.form_class(instance=user_object)
+
+        except Exception as e:
+            print(e)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        user_object = User.objects.get(id=self.kwargs.get("pk"))
+        form = self.form_class(request.POST, instance=user_object)
+        return self.form_valid(form)
+
+    def form_valid(self, form):
+        try:
+            if form.is_valid():
+                messages.success(self.request, "Teacher Info Updated Successfully")
+            return super().form_valid(form)
+
+        except Exception as e:
+            print(e)
+            return super().form_invalid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, f"{form.errors}")
+        return super().form_invalid(form)
+
+
+class AddTeacherEducationView(LoginRequiredMixin, AdminPassesTestMixin, UpdateView):
+    model = User
+    form_class = TeacherEducationForm
+    template_name = "authority/add_teacher_education.html"
+    success_url = reverse_lazy("authority:teacher_list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            user_object = User.objects.get(id=self.kwargs.get("pk"))
+            teacher_education = EducationalQualification.objects.get_or_create(
+                teacher=user_object
+            )
+            context["title"] = "Add/Edit Teacher Educational Info"
+            context["name"] = user_object.name
+            if teacher_education:
+                context["form"] = self.form_class(instance=user_object.qualifications)
+            else:
+                context["form"] = self.form_class()
+
+        except Exception as e:
+            print(e)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        user_object = User.objects.get(id=self.kwargs.get("pk"))
+        # teacher_education = EducationalQualification.objects.get_or_create(
+        #     teacher=user_object
+        # )
+        form = self.form_class(request.POST, instance=user_object.qualifications)
+
+        return self.form_valid(form)
+
+    def form_valid(self, form):
+        try:
+            if form.is_valid():
+                messages.success(
+                    self.request, "Teacher Educational Info Updated Successfully"
+                )
+            return super().form_valid(form)
+
+        except Exception as e:
+            print(e)
+            return super().form_invalid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, f"{form.errors}")
+        return super().form_invalid(form)
+
+
+class DeleteTeacherView(LoginRequiredMixin, AdminPassesTestMixin, DeleteView):
+    model = User
+    context_object_name = "user"
+    template_name = "authority/delete_teacher.html"
+    success_url = reverse_lazy("authority:teacher_list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Delete Teacher"
+        return context
+
+    def form_valid(self, form):
+        self.object.is_active = False
+        self.object.save()
+        return redirect(self.success_url)
