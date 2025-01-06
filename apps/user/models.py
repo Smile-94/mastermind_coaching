@@ -115,6 +115,14 @@ class User(DjangoBaseModel, AbstractBaseUser, PermissionsMixin):
             if not generated_username:
                 raise ValidationError(_("Could not generate a valid username."))
             self.username = generated_username
+        # Generate username if missing and user type is TEACHER
+        if not self.username and self.user_type == UserTypeChoice.STUDENT:
+            generated_username = generate_custom_id(
+                id_prefix="STU", model_class=self.__class__, field="username"
+            )
+            if not generated_username:
+                raise ValidationError(_("Could not generate a valid username."))
+            self.username = generated_username
 
         super().clean()
 
@@ -124,3 +132,19 @@ class User(DjangoBaseModel, AbstractBaseUser, PermissionsMixin):
         """
         self.full_clean()  # Calls the clean method
         super().save(*args, **kwargs)
+
+
+class AdminProfile(DjangoBaseModel):
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="admin_profile"
+    )
+    profile_picture = models.ImageField(
+        upload_to="profile_picture/", blank=True, null=True
+    )
+
+    class Meta:
+        verbose_name = _("Admin Profile")
+        verbose_name_plural = _("Admin Profile")
+
+    def __str__(self):
+        return f"{self.user.name} - Admin Profile"

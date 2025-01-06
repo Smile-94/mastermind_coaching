@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as UA
 
-from apps.user.models import User
+from apps.user.models import User, AdminProfile
 
 
 @admin.register(User)
@@ -95,3 +95,25 @@ class UserAdmin(UA):
         "created_at",
         "updated_at",
     )
+
+
+# * <<------------------------------------*** Admin Profile Admin ***----------------------------->>
+@admin.register(AdminProfile)
+class EducationalQualificationAdmin(admin.ModelAdmin):
+    """
+    Admin interface for teacher educational qualification.
+    """
+
+    list_display = (
+        "id",
+        "user",
+        "profile_picture",
+    )
+    list_display_links = ("id",)
+    search_fields = (
+        "id",
+        "user__username",
+        "user__email",
+        "user__name",
+    )
+    list_per_page = 50

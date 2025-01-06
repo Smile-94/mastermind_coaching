@@ -1,0 +1,119 @@
+{% extends 'authority/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %} {{title}} {% endblock title %}
+
+
+{% block body %}
+<div class="bg-light rounded h-100 p-4">
+    {% if updated %}
+        <form method='POST'> {% csrf_token %}
+            <div class="row mb-3">
+                <div class="col ">
+                    <label for="exampleInputEmail1" class="form-label">Institute Name</label>
+                    {{form.institute_name | add_class:"form-select"}}
+                </div>
+                <div class="col ">
+                    <label for="exampleInputEmail1" class="form-label">Institute Address</label>
+                    {{form.institute_address | add_class:"form-select"}}
+                </div>
+                
+            </div>
+            <div class="mb-3">
+                <a class="btn btn-success" href="{% url 'authority:institute_info' %}" role="button"> <i class="fa-solid fa-arrow-left me-2"></i> Back</a>
+                <button type="submit" class="btn btn-primary">Save</button>  
+            </div>
+            
+        </form>
+    
+    {% else %}
+    <div class="row">
+        <div class="col-md-4">
+            <h6 class="mb-4">Institute List</h6>
+        </div>
+        <div class="col-md-4 offset-md-4 d-flex flex-row-reverse mb-2">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              Add Institute
+              </button>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-4">
+        <form class="d-flex">
+            <div class="row">
+                <div class="col ">
+                    {{institutes.form.query | add_class:"form-control" }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col ">
+                    <button class="btn btn-outline-success ms-2" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+      </div>
+    
+    <table class="table table-striped table-hover ">
+        <thead class="table-dark">
+            <tr>
+              <th scope="col">Sl</th>
+              <th scope="col">Institute Name</th>
+              <th scope="col">Institute Address</th>
+              <th scope="col">Created at</th>
+              <th scope="col">Updated at</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody> 
+            {% if institutes %} 
+                {% for class in institutes.qs %}
+                <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td> {{class.institute_name}} </td>
+                    <td> {{class.institute_address}} </td>
+                    <td>{{class.created_at}}</td>
+                    <td>{{class.updated_at}}</td>
+                    <td>
+                        <a class="btn btn-success" href="{% url 'authority:update_institute' class.id %}" role="button"><i class="fa-solid fa-pen-to-square"></i></a>
+                        <a class="btn btn-danger" href="{% url 'authority:delete_institute' class.id %}" role="button"><i class="fa-solid fa-trash"></i></a>
+                    </td>
+                  </tr>
+                {% endfor %}     
+            {% endif %}     
+      </table>
+</div>
+{% endif %}
+    
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add Class</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="POST"> {% csrf_token %}
+                <div class="row mb-4">
+                    <div class="col">
+                        <label for="exampleInputEmail1" class="form-label">Institute Name</label>
+                        {{form.institute_name |add_class:"form-control"}}
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputEmail1" class="form-label">Institute Address</label>
+                        {{form.institute_address |add_class:"form-control"}}
+                    </div>
+                </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="Submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+      </div>
+    </div>
+  </div>
+  
+{% endblock body %}

@@ -5,13 +5,16 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.shortcuts import HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # class based view
 from django.views import View
+from django.contrib.auth.views import LogoutView
 
 # login and logout
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
+from django.contrib.auth import logout
 
 # forms
 from django.contrib.auth.forms import AuthenticationForm
@@ -56,8 +59,8 @@ class UserLoginView(View):
             elif user is not None and request_user.user_type == UserTypeChoice.TEACHER:
                 login(request, user)
                 messages.success(request, "Welcome to your user panel")
-                # return HttpResponseRedirect(reverse("employee:employee_home"))
-                return HttpResponse("We are working on Teacher panel")
+                return HttpResponseRedirect(reverse("teacher:teacher_home"))
+                # return HttpResponse("We are working on Teacher panel")
 
             else:
                 messages.error(request, "User name or password invalid, try again!")
@@ -68,3 +71,12 @@ class UserLoginView(View):
             print(e)
             messages.error(request, "User name or password invalid, try again!")
             return redirect(reverse("accounts:login"))
+
+
+class UserLogoutView(LoginRequiredMixin, View):
+    template_name = "accounts/login.html"
+    extra_context = {"form": AuthenticationForm}
+
+    def dispatch(self, request, *args, **kwargs):
+        logout(request)
+        return redirect(reverse("accounts:login"))

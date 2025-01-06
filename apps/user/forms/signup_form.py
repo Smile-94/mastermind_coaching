@@ -12,6 +12,7 @@ class SignUpForm(UserCreationForm):
         widget=TextInput(attrs={"class": "form-control", "placeholder": "John Doe"}),
     )
     email = EmailField(
+        required=False,
         widget=EmailInput(
             attrs={"class": "form-control", "placeholder": "example@example.com"}
         ),

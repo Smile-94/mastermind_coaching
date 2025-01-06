@@ -1,0 +1,78 @@
+{% extends 'authority/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %} {{title}} {% endblock title %}
+
+
+{% block body %}
+<div class="row g-4">
+    <div class="col-sm-12 col-xl-12">
+        <div class="bg-light rounded h-100 p-4">
+            <h6 class="mb-4">Batch Information</h6>
+            <form action="" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+                <div class="mb-3">
+                    <div class="row mb-4">
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Batch Name</label>
+                            {{form.batch_name|add_class:"form-control"}}
+                        </div>
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Course</label>
+                            {{form.course|add_class:"form-select"}}
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Class</label>
+                            {{form.student_class|add_class:"form-select"}}
+                        </div>
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Start Date</label>
+                            {{form.start_date|add_class:"form-control"}}
+                        </div>
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">End Date</label>
+                            {{form.end_date|add_class:"form-control"}}
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Course Instructor</label>
+                            {{form.course_instructor | add_class:"form-select" }}
+                        </div>
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Class Days</label>
+                            {{form.class_days | add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Maximum Student</label>
+                            {{form.maximum_students | add_class:"form-select" }}
+                        </div>
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Class Per Week</label>
+                            {{form.class_per_week | add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Class Start Time</label>
+                            {{form.start_time| add_class:"form-select" }}
+                        </div>
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Class End Time</label>
+                            {{form.end_time | add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <a class="btn btn-success" href="{% url 'authority:batch_list' %}" role="button"> <i class="fa-solid fa-arrow-left me-2"></i> Back</a>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+    </div>    
+</div>
+  
+{% endblock body %}
+    

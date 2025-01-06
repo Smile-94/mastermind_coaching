@@ -1,0 +1,50 @@
+{% extends 'authority/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %} {{title}} {% endblock title %}
+
+
+{% block body %}
+
+<div class="row g-4">
+    <div class="col-sm-12 col-xl-12">
+        <div class="bg-light rounded h-100 p-4">
+            <h6 class="mb-4">Update Notice</h6>
+            <form action="" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+                <div class="mb-3">
+                    <div class="row mb-4">
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Title</label>
+                            {{form.title|add_class:"form-control"}}
+                        </div>
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Published Status</label>
+                            {{form.published_status|add_class:"form-select"}}
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Published For</label>
+                            {{form.published_for|add_class:"form-select"}}
+                        </div>
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Upload File</label>
+                            {{form.file|add_class:"form-control"}}
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Notice Details</label>
+                            {{form.description | add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <a class="btn btn-success" href="{% url 'authority:notice_list' %}" role="button"> <i class="fa-solid fa-arrow-left me-2"></i> Back</a>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+    </div>    
+</div>
+  
+{% endblock body %}

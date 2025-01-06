@@ -1,0 +1,70 @@
+{% extends 'authority/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %} {{title}} {% endblock title %}
+
+
+{% block body %}
+
+<div class="row g-4">
+    <div class="col-sm-12 col-xl-12">
+        <div class="bg-light rounded h-100 p-4">
+            <h6 class="mb-4">Add/Update Student Information</h6>
+            <form action="" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+                <div class="mb-3">
+                    <div class="row mb-4">
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Current Institute</label>
+                            {{form.institute|add_class:"form-control"}}
+                        </div>
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">class</label>
+                            {{form.study_class|add_class:"form-select"}}
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Guardian Name</label>
+                            {{form.guardian_name|add_class:"form-control"}}
+                        </div>
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Relation With Guardian</label>
+                            {{form.relation_with_guardian|add_class:"form-control"}}
+                        </div>
+                        
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Contact Number</label>
+                            {{form.contact_number|add_class:"form-control"}}
+                        </div>
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Gender</label>
+                            {{form.gender | add_class:"form-control" }}
+                        </div>
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Date of Birth</label>
+                            {{form.date_of_birth | add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Address</label>
+                            {{form.address | add_class:"form-control" }}
+                        </div>
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Profile Picture</label>
+                            {{form.profile_photo | add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <a class="btn btn-success" href="{% url 'authority:teacher_list' %}" role="button"> <i class="fa-solid fa-arrow-left me-2"></i> Back</a>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+    </div>    
+</div>
+  
+{% endblock body %}
+    

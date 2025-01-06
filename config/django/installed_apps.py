@@ -18,6 +18,7 @@ class InstalledAppsSettings(BaseSettings):
         "apps.endpoint.apps.EndpointConfig",
         "apps.teacher.apps.TeacherConfig",
         "apps.authority.apps.AuthorityConfig",
+        "apps.student.apps.StudentConfig",
     ]
 
     INSTALLED_APPS: list[str] = [
