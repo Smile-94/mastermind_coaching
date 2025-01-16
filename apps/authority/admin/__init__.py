@@ -1,6 +1,12 @@
 from apps.authority.admin.class_admin import InstituteAdmin, StudyClassAdmin
 from apps.authority.admin.notice_admin import NoticeAdmin
-from apps.authority.admin.course_admin import CourseAdmin, BatchAdmin, WeekDaysAdmin
+from apps.authority.admin.course_admin import (
+    CourseAdmin,
+    BatchAdmin,
+    WeekDaysAdmin,
+    EnrolledStudentAdmin,
+    SubmittedAssignmentAdmin,
+)
 
 __all__ = [
     "InstituteAdmin",
@@ -9,4 +15,7 @@ __all__ = [
     "CourseAdmin",
     "BatchAdmin",
     "WeekDaysAdmin",
+    "EnrolledStudentAdmin",
+    "SubmittedAssignmentAdmin",
+    # Add other related admin models here if necessary.
 ]

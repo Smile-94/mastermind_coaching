@@ -11,6 +11,7 @@ from django.views.generic import TemplateView
 from apps.user.models import User
 from common.models import UserTypeChoice
 from apps.authority.models.notice_model import Notice, PublishedStatusChoice
+from apps.authority.models.course_model import Batch
 
 
 # Create your views here.
@@ -18,13 +19,14 @@ class TeacherHomeView(LoginRequiredMixin, TeacherPassesTestMixin, TemplateView):
     template_name = "teacher/index.html"
 
     def get_context_data(self, **kwargs):
+        teacher_profile = self.request.user.teacher_profile
         context = super().get_context_data(**kwargs)
         context["title"] = "Admin Panel"
         context["total_student"] = User.objects.filter(
             user_type=UserTypeChoice.STUDENT, is_active=True
         ).count()
-        context["total_teacher"] = User.objects.filter(
-            user_type=UserTypeChoice.TEACHER, is_active=True
+        context["total_course"] = Batch.objects.filter(
+            course_instructor=teacher_profile, is_active=True
         ).count()
         context["latest_students"] = User.objects.filter(
             user_type=UserTypeChoice.TEACHER, is_active=True

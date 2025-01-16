@@ -64,40 +64,24 @@
           </div>
           <div class="navbar-nav w-100">
             <a href="{% url 'teacher:teacher_home' %}" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-            <div class="nav-item dropdown">
-              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa-solid fa-user"></i>Teacher</a>
-              <div class="dropdown-menu bg-transparent border-0">
-                <a href="{% url 'authority:add_teacher' %}" class="dropdown-item"><i class="fa-solid fa-plus me-2"></i>Add Teacher</a>
-                <a href="{% url 'authority:teacher_list' %}" class="dropdown-item"><i class="fa-solid fa-list me-2"></i>Teacher List</a>
-              </div>
-            </div>
-            <div class="nav-item dropdown">
+            
+            {% comment %} <div class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa-solid fa-user"></i>Student</a>
               <div class="dropdown-menu bg-transparent border-0">
                 <a href="{% url 'authority:add_student' %}" class="dropdown-item"><i class="fa-solid fa-plus me-2"></i>Add Student</a>
                 <a href="{% url 'authority:student_list' %}" class="dropdown-item"><i class="fa-solid fa-list me-2"></i>Student List</a>
               </div>
-            </div>
-            <div class="nav-item dropdown">
-              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa-solid fa-house"></i>Class & Institute</a>
-              <div class="dropdown-menu bg-transparent border-0">
-                <a href="{% url 'authority:class_info' %}" class="dropdown-item"><i class="fa-solid fa-list me-2"></i>Class List</a>
-                <a href="{% url 'authority:institute_info' %}" class="dropdown-item"><i class="fa-solid fa-list me-2"></i>Institute List</a>
-              </div>
-            </div>
-            <div class="nav-item dropdown">
-              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa-solid fa-book"></i>Course</a>
-              <div class="dropdown-menu bg-transparent border-0">
-                <a href="{% url 'authority:class_info' %}" class="dropdown-item"><i class="fa-solid fa-list me-2"></i>Class List</a>
-                <a href="{% url 'authority:institute_info' %}" class="dropdown-item"><i class="fa-solid fa-list me-2"></i>Institute List</a>
-              </div>
-            </div>
+            </div> {% endcomment %}
+            
             <div class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa-regular fa-note-sticky"></i></i>Notice</a>
               <div class="dropdown-menu bg-transparent border-0">
                 <a href="{% url 'teacher:teacher_notice_list' %}" class="dropdown-item"><i class="fa-solid fa-list me-2"></i>Notice List</a>
               </div>
             </div>
+            <a href="{% url 'teacher:teacher_class_routine' %}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Class Routine</a>
+            <a href="{% url 'teacher:teacher_course_enrollment' %}" class="nav-item nav-link"><i class="fa-solid fa-book me-2"></i>Enrolled Course</a>
+            <a href="{% url 'teacher:teacher_assignment_list' %}" class="nav-item nav-link"><i class="fa-solid fa-book me-2"></i>Assignment List</a>
           </div>
         </nav>
       </div>

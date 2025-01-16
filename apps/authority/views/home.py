@@ -11,6 +11,7 @@ from django.views.generic import TemplateView
 from apps.user.models import User
 from common.models import UserTypeChoice
 from apps.authority.models.notice_model import Notice, PublishedStatusChoice
+from apps.authority.models.course_model import Batch
 
 
 # Create your views here.
@@ -32,4 +33,5 @@ class AdminHomeView(LoginRequiredMixin, AdminPassesTestMixin, TemplateView):
         context["latest_notice"] = Notice.objects.exclude(
             published_status=PublishedStatusChoice.ARCHIVED
         ).order_by("-id")[:10]
+        context["total_course"] = Batch.objects.filter(is_active=True).count()
         return context

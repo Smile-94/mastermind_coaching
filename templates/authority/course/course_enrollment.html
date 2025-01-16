@@ -1,0 +1,29 @@
+{% extends 'authority/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %} {{title}} {% endblock title %}
+
+
+{% block body %}
+<div class="row g-4">
+    <div class="col-sm-12 col-xl-12">
+        <div class="bg-light rounded h-100 p-4">
+            <h6 class="mb-4">Course Enrollment</h6>
+            <form action="" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+                <div class="mb-3">
+                    <div class="row mb-4">
+                        <div class="col">
+                            <label for="exampleInputEmail1" class="form-label">Student</label>
+                            {{form.enrolled_student|add_class:"form-select"}}
+                        </div>
+                    </div>
+                </div>
+                <a class="btn btn-success" href="{% url 'authority:course_enrollment' %}" role="button"> <i class="fa-solid fa-arrow-left me-2"></i> Back</a>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+    </div>    
+</div>
+  
+{% endblock body %}

@@ -1,5 +1,6 @@
 from django.db.models import (
     CharField,
+    TextField,
     DecimalField,
     ForeignKey,
     CASCADE,
@@ -10,11 +11,14 @@ from django.db.models import (
     SET_NULL,
     ManyToManyField,
     TimeField,
+    FileField,
+    DateTimeField,
 )
 from django.utils.translation import gettext_lazy as _
 from common.models import DjangoBaseModel
 from apps.teacher.models.profile_model import TeacherProfile
 from apps.authority.models.class_model import StudyClass
+from apps.student.models.student_model import StudentProfile
 
 
 class WeekDaysChoices(TextChoices):
@@ -87,3 +91,48 @@ class Batch(DjangoBaseModel):
 
     def __str__(self):
         return self.batch_name
+
+
+class EnrolledStudent(DjangoBaseModel):
+    enrolled_batch = ForeignKey(Batch, related_name="enrolled_batch", on_delete=CASCADE)
+    enrolled_student = ForeignKey(
+        StudentProfile,
+        related_name="batch_enrolled_student",
+        on_delete=SET_NULL,
+        blank=True,
+        null=True,
+    )
+
+    def __str__(self):
+        return f"{self.enrolled_batch}"
+
+
+class Assignment(DjangoBaseModel):
+    batch = ForeignKey(Batch, related_name="assignments_batch", on_delete=CASCADE)
+    assignment_title = CharField(max_length=255)
+    description = TextField(blank=True, null=True)
+    assignment_file = FileField(upload_to="assignment/", blank=True, null=True)
+    due_date = DateTimeField(blank=True, null=True)
+
+    class Meta(DjangoBaseModel.Meta):
+        ordering = ("-id",)
+        verbose_name = _("Assignment")
+        verbose_name_plural = _("Assignment")
+
+    def __str__(self):
+        return f"{self.batch}' assignment"
+
+
+class SubmittedAssignment(DjangoBaseModel):
+    assignment = ForeignKey(
+        Assignment, related_name="submitted_assignment", on_delete=CASCADE
+    )
+    submitted_student = ForeignKey(
+        EnrolledStudent,
+        related_name="submitted_assignment",
+        on_delete=CASCADE,
+    )
+    upload_file = FileField(upload_to="assignment/", blank=True, null=True)
+    is_graded = BooleanField(default=False, blank=True, null=True)
+    grade = CharField(max_length=10, blank=True, null=True)
+    description = TextField(blank=True, null=True)

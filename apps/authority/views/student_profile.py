@@ -20,6 +20,7 @@ from django.views.generic import DeleteView
 from apps.user.models import User
 from apps.student.models.student_model import StudentProfile
 from common.models import UserTypeChoice
+from apps.authority.models.course_model import Batch
 
 # forms
 from apps.user.forms.signup_form import SignUpForm
@@ -228,3 +229,25 @@ class DeleteStudentView(LoginRequiredMixin, AdminPassesTestMixin, DeleteView):
         self.object.is_active = False
         self.object.save()
         return redirect(self.success_url)
+
+
+class StudentEnrolledCourseView(LoginRequiredMixin, AdminPassesTestMixin, ListView):
+    model = Batch
+    queryset = Batch.objects.filter(
+        is_active=True,
+    ).order_by("-id")
+    template_name = "authority/course/enrolled_course.html"
+
+    def get_context_data(self, **kwargs):
+        try:
+            student = StudentProfile.objects.get(id=self.kwargs.get("pk"))
+        except Exception as e:
+            print(e)
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Enrollment List"
+        if student:
+            context["batch_list"] = self.queryset.filter(
+                enrolled_batch__enrolled_student=student
+            )
+        context["student"] = student
+        return context

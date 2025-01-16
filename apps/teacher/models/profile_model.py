@@ -60,9 +60,9 @@ class TeacherProfile(DjangoBaseModel):
 
     def __str__(self):
         if self.profile_of.name:
-            return f"{self.profile_of.name}'s profile"
+            return f"{self.profile_of.name}"
         else:
-            return f"{self.profile_of.username}'s profile"
+            return f"{self.profile_of.username}"
 
 
 class Address(DjangoBaseModel):

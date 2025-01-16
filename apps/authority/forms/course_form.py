@@ -2,7 +2,7 @@ from django.forms import ModelForm, DateField, DateInput, TimeField, TimeInput
 from django.core.exceptions import ValidationError
 
 # models
-from apps.authority.models.course_model import Course, Batch, WeekDays
+from apps.authority.models.course_model import Course, Batch, WeekDays, EnrolledStudent
 
 
 class WeekDaysForm(ModelForm):
@@ -43,7 +43,8 @@ class BatchForm(ModelForm):
                 f"The selected days cannot exceed the allowed classes per week ({class_per_week})."
             )
 
-        # Check for overlapping batches for the same instructor
+        # Exclude the current batch if it's an update
+        current_batch_id = self.instance.pk  # Get the current batch ID
         overlapping_batches = (
             Batch.objects.filter(
                 course_instructor=course_instructor,
@@ -55,12 +56,19 @@ class BatchForm(ModelForm):
                 start_time__lt=end_time,
                 end_time__gt=start_time,
             )
+            .exclude(pk=current_batch_id)  # Exclude the current batch
             .distinct()
         )
 
         if overlapping_batches.exists():
             raise ValidationError(
-                "The instructor already has a batch scheduled with conflict days or times."
+                "The instructor already has a batch scheduled with conflicting days or times."
             )
 
         return cleaned_data
+
+
+class EnrolledStudentForm(ModelForm):
+    class Meta:
+        model = EnrolledStudent
+        fields = ("enrolled_student",)

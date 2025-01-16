@@ -61,4 +61,4 @@ class StudentProfile(DjangoBaseModel):
         verbose_name = _("Student Profile")
 
     def __str__(self):
-        return f"{self.student_user.name}'s profile"
+        return f"{self.student_user.name}-({self.student_user.username})"

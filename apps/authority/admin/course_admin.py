@@ -5,7 +5,14 @@ from django.contrib.admin import (
 )
 
 
-from apps.authority.models.course_model import Course, Batch, WeekDays
+from apps.authority.models.course_model import (
+    Course,
+    Batch,
+    WeekDays,
+    EnrolledStudent,
+    Assignment,
+    SubmittedAssignment,
+)
 
 
 @register(WeekDays)
@@ -71,5 +78,65 @@ class BatchAdmin(ModelAdmin):
     search_fields = (
         "id",
         "batch_name",
+    )
+    list_per_page = 50
+
+
+@register(EnrolledStudent)
+class EnrolledStudentAdmin(ModelAdmin):
+    """
+    Admin interface for the EnrolledStudent model.
+    """
+
+    list_display = (
+        "id",
+        "enrolled_batch",
+        "enrolled_student",
+    )
+    list_display_links = ("id",)
+    search_fields = (
+        "id",
+        "enrolled_batch__batch_name",
+        "enrolled_student__student_user__username",
+    )
+    list_per_page = 50
+
+
+@register(Assignment)
+class AssignmentAdmin(ModelAdmin):
+    """
+    Admin interface for the Assignment model.
+    """
+
+    list_display = (
+        "id",
+        "assignment_title",
+        "due_date",
+    )
+    list_display_links = ("id",)
+    search_fields = (
+        "id",
+        "assignment_title",
+    )
+    list_per_page = 50
+
+
+@register(SubmittedAssignment)
+class SubmittedAssignmentAdmin(ModelAdmin):
+    """
+    Admin interface for the SubmittedAssignment model.
+    """
+
+    list_display = (
+        "id",
+        "assignment",
+        "submitted_student",
+        "is_graded",
+        "grade",
+    )
+    list_display_links = ("id",)
+    search_fields = (
+        "id",
+        "assignment__assignment_title",
     )
     list_per_page = 50

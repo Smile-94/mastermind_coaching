@@ -29,6 +29,7 @@ from apps.authority.views.student_profile import (
     StudentListView,
     DeleteStudentView,
     AddUpdateStudentInfoView,
+    StudentEnrolledCourseView,
 )
 
 from apps.authority.views.manage_notice import (
@@ -58,6 +59,11 @@ from apps.authority.views.manage_batch import (
     UpdateBatchView,
     DeleteBatchView,
 )  # update batch url
+
+from apps.authority.views.enrolled_student import (
+    CourseEnrollmentListView,
+    EnrollStudentCreateView,
+)
 
 app_name = "authority"
 
@@ -133,6 +139,11 @@ urlpatterns += [
         AddUpdateStudentInfoView.as_view(),
         name="add_update_student_info",
     ),  # add update student info url
+    path(
+        "student-enrolled-courses/<int:pk>/",
+        StudentEnrolledCourseView.as_view(),
+        name="student_enrolled_courses",
+    ),  # student enrolled courses url
 ]
 
 # Manage notice
@@ -191,3 +202,18 @@ urlpatterns += [
         "delete-batch/<int:pk>/", DeleteBatchView.as_view(), name="delete_batch"
     ),  # delete batch url
 ]  # update batch url
+
+
+# Course Enrollment
+urlpatterns += [
+    path(
+        "course-enrollment/",
+        CourseEnrollmentListView.as_view(),
+        name="course_enrollment",
+    ),  # course enrollment list url
+    path(
+        "enroll-student/<int:batch>/",
+        EnrollStudentCreateView.as_view(),
+        name="enroll_student",
+    ),  # enroll student url
+]
