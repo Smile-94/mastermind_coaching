@@ -14,7 +14,14 @@ from apps.teacher.views.manage_assignment import (
     TeacherAssignmentDetailView,
     UpdateAssignmentView,
     DeleteAssignmentView,
+    GradedSubmittedAssignmentView,
 )
+from apps.teacher.views.manage_attendance import (
+    TakeAttendanceView,
+    TeacherAttendanceListView,
+    UpdateAttendanceView,
+)
+from apps.teacher.views.enrolled_student import TeacherEnrolledStudentListView
 
 app_name = "teacher"
 
@@ -74,4 +81,37 @@ urlpatterns += [
         DeleteAssignmentView.as_view(),
         name="delete_assignment",
     ),  # delete assignment url
+    path(
+        "graded-submitted-assignment/<int:pk>/",
+        GradedSubmittedAssignmentView.as_view(),
+        name="graded_submitted_assignment",
+    ),  # graded submitted assignment url
+]
+
+# Manage Attendance
+urlpatterns += [
+    path(
+        "take-attendance/<int:batch_id>/",
+        TakeAttendanceView.as_view(),
+        name="take_attendance",
+    ),  # take attendance url
+    path(
+        "attendance-list/",
+        TeacherAttendanceListView.as_view(),
+        name="teacher_attendance_list",
+    ),  # attendance list url
+    path(
+        "update-attendance/<int:pk>/",
+        UpdateAttendanceView.as_view(),
+        name="update_attendance",
+    ),  # update attendance url
+]
+
+# Enrolled Student
+urlpatterns += [
+    path(
+        "enrolled-student/<int:pk>/",
+        TeacherEnrolledStudentListView.as_view(),
+        name="teacher_enrolled_student",
+    ),  # enrolled student list url
 ]

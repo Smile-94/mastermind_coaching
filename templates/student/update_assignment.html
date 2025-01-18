@@ -1,0 +1,133 @@
+{% extends 'student/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block title %} {{title}} {% endblock title %}
+
+
+{% block body %}
+<!-- Recent Sales Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light rounded h-100 p-4">
+            
+        {% if is_update %}
+            <h6 class="mb-4">Re Submit Assignment</h6>
+
+        {% endif %}
+            
+        
+        <form action="" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+            <div class="mb-3">
+                
+                <div class="row mb-4">
+                    <div class="col">
+                        <label for="exampleInputEmail1" class="form-label">Upload File</label>
+                        {{form.upload_file|add_class:"form-control"}}
+                    </div>
+                    
+                </div>
+               
+                {% comment %} <input type="hidden" name="batch_id" value="{{batch_id}}"> {% endcomment %}
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <div class="bg-light text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h5 class="mb-0">Assignment Details</h5>
+        </div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                {% comment %} <a href="{% url 'report:onarivla_appointment_report' appointment.id %}" class="btn btn-sm btn-primary me-md-2" target="_blank" type="button"><i class="fa-solid fa-file-arrow-down"></i></a>
+                <a href="{% url 'report:onarivla_appointment_report' appointment.id %}" class="btn btn-sm btn-primary" target="_blank" type="button"><i class="fa-solid fa-print"></i></a> {% endcomment %}
+                <a class="btn btn-primary" href="{% url 'student:student_assignment_details' object.assignment.id %}" role="button">Back</a>    
+            </div>
+        
+
+        {% if object %}
+        <div class="d-flex align-items-center justify-content-between mb-2">
+            <h6 class="mb-0">Assignment Details</h6>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="table-dark ">
+                        <th class="col-4" scope="col-4">Fields Name</th>
+                        <th class="col-8" scope="col-8">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <td> Assignment Title </td>
+                            <td> {{object.assignment_title}}</td>
+                        </tr>  
+                        
+                        <tr>
+                            <td>Batch Name</td>
+                            <td> {{object.batch.batch_name| title}} </td>
+                        </tr>    
+                        <tr>
+                            <td>Class</td>
+                            <td> {{object.batch.student_class.class_name|title}} </td>
+                        </tr>  
+                        
+                        
+                        {% if object.file %}
+                        <tr>
+                            <td>Assignment File </td>
+                            <td> <a href="{{ object.assignment_file.url }}" target="_blank">Open File</a> </td>
+                        </tr>   
+                        {% else %}
+                        <tr>
+                            <td>Assignment File </td>
+                            <td> Not Added </td>
+                        </tr>  
+                        {% endif %}
+                        <tr>
+                            <td>Assignment Details</td>
+                            <td>
+                                {% if object.description|length > 150 %}
+                                    <span class="short-description">
+                                        {{ object.description|slice:":150" }}...
+                                        <a href="#" onclick="toggleDescription(this); return false;">Read more</a>
+                                    </span>
+                                    <span class="full-description" style="display: none;">
+                                        {{ object.description }}
+                                        <a href="#" onclick="toggleDescription(this); return false;">Read less</a>
+                                    </span>
+                                {% else %}
+                                    {{ object.description }}
+                                {% endif %}
+                            </td>
+                        </tr>   
+                              
+                         
+                </tbody>
+            </table>
+        </div>
+        {% endif %} 
+            
+    </div>
+   
+</div>
+
+<script>
+    function toggleDescription(link) {
+        const shortDesc = link.parentElement.classList.contains("short-description");
+        const shortDescription = link.closest("td").querySelector(".short-description");
+        const fullDescription = link.closest("td").querySelector(".full-description");
+
+        if (shortDesc) {
+            // Show full description and hide short description
+            shortDescription.style.display = "none";
+            fullDescription.style.display = "inline";
+        } else {
+            // Show short description and hide full description
+            shortDescription.style.display = "inline";
+            fullDescription.style.display = "none";
+        }
+    }
+</script>
+  
+{% endblock body %}

@@ -18,11 +18,12 @@ from django.views.generic import DetailView
 from django.views.generic import DeleteView
 
 # Models
-from apps.authority.models.course_model import Assignment, Batch
+from apps.authority.models.course_model import Assignment, Batch, SubmittedAssignment
 
 
 # forms
 from apps.authority.forms.assignment_form import AssignmentForm
+from apps.authority.forms.course_form import SubmittedAssignmentForm
 
 
 # Filters
@@ -88,6 +89,9 @@ class TeacherAssignmentDetailView(
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["title"] = "Assignment Details"
+        context["submitted_assignment"] = SubmittedAssignment.objects.filter(
+            assignment=self.object
+        )
         return context
 
 
@@ -149,3 +153,64 @@ class DeleteAssignmentView(LoginRequiredMixin, TeacherPassesTestMixin, DeleteVie
     def form_invalid(self, form):
         messages.error(self.request, f"Failed to delete assignment {form.errors}")
         super().form_invalid(form)
+
+
+class GradedSubmittedAssignmentView(
+    LoginRequiredMixin, TeacherPassesTestMixin, UpdateView
+):
+    model = SubmittedAssignment
+    form_class = SubmittedAssignmentForm
+    template_name = "teacher/graded_assignment.html"
+    success_url = reverse_lazy("teacher:teacher_assignment_list")
+
+    def get_object(self, queryset=None):
+        """
+        Override get_object to explicitly fetch the model instance.
+        """
+        pk = self.kwargs.get("pk")  # Assuming `pk` is passed as a URL parameter
+        return self.model.objects.get(pk=pk)
+
+    def get_success_url(self):
+        """
+        Dynamically generate the success URL using the object's related assignment's primary key.
+        """
+
+        return reverse_lazy(
+            "teacher:teacher_assignment_details",
+            kwargs={"pk": self.get_object().assignment.pk},
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context["title"] = "Graded Assignment"
+            context["is_update"] = True
+            context["object"] = self.get_object()
+        except Exception as e:
+            print(e)
+        return context
+
+    def post(self, request, *args, **kwargs):
+        # Use get_object to fetch the instance and set self.object
+        self.object = self.get_object()
+        form = self.form_class(request.POST, instance=self.object)
+        if form.is_valid():
+            return self.form_valid(form)
+        return self.form_invalid(form)
+
+    def form_valid(self, form):
+        try:
+            if form.is_valid():
+                self.object.is_graded = True
+                self.object.save()
+                # Redirect to the assignment details page
+                return redirect(self.get_success_url())
+            messages.success(self.request, "Graded Submitted Assignment Successfully ")
+            return super().form_valid(form)
+        except Exception as e:
+            print(e)
+            return super().form_invalid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, f"Failed to grade assignment: {form.errors}")
+        return super().form_invalid(form)

@@ -1,0 +1,304 @@
+{% extends 'student/base.html' %}
+{% load static %}
+
+{% block title %}
+  {{ title }}
+{% endblock %}
+
+{% block body %}
+  <!-- Sale & Revenue Start -->
+  <div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+      <div class="col-sm-6 col-xl-3">
+        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+          <i class="fa-solid fa-graduation-cap fa-3x text-primary"></i>
+          <div class="ms-3">
+            <p class="mb-2">Enrolled Batch</p>
+            <h6 class="mb-0">{{enrolled_batch}} </h6>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xl-3">
+        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+          <i class="fa-solid fa-user-large fa-3x text-primary"></i>
+          <div class="ms-3">
+            <p class="mb-2">Pending Assignment</p>
+            <h6 class="mb-0"> {{pending_assignment_count}} </h6>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-xl-3">
+        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+          <i class="fa fa-chart-area fa-3x text-primary"></i>
+          <div class="ms-3">
+            <p class="mb-2">Today's Present</p>
+            <h6 class="mb-0"> {{total_present}} </h6>
+          </div>ss
+        </div>
+      </div>
+      <div class="col-sm-6 col-xl-3">
+        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+          <i class="fa-solid fa-clock fa-3x text-primary"></i>
+          <div class="ms-3">
+            <p class="mb-2">Clock</p>
+            <h6 class="mb-0 text-black"><div id="clock"></div></h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Sale & Revenue End -->
+
+ {% comment %} <!-- Sales Chart Start -->
+  <div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+      <div class="col-sm-12 col-xl-6">
+        <div class="bg-light text-center rounded p-4">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Worldwide Sales</h6>
+            <a href="">Show All</a>
+          </div>
+          <canvas id="worldwide-sales"></canvas>
+        </div>
+      </div>
+      <div class="col-sm-12 col-xl-6">
+        <div class="bg-light text-center rounded p-4">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Salse & Revenue</h6>
+            <a href="">Show All</a>
+          </div>
+          <canvas id="salse-revenue"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Sales Chart End --> {% endcomment %}
+
+  {% comment %} <!-- Recent Sales Start -->
+  <div class="container-fluid pt-4 px-4">
+    <div class="bg-light text-center rounded p-4">
+      <div class="d-flex align-items-center justify-content-between mb-4">
+        <h6 class="mb-0">Recent Salse</h6>
+        <a href="">Show All</a>
+      </div>
+      <div class="table-responsive">
+        <table class="table text-start align-middle table-bordered table-hover mb-0">
+          <thead>
+            <tr class="text-dark">
+              <th scope="col">
+                <input class="form-check-input" type="checkbox" />
+              </th>
+              <th scope="col">Date</th>
+              <th scope="col">Invoice</th>
+              <th scope="col">Customer</th>
+              <th scope="col">Amount</th>
+              <th scope="col">Status</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <input class="form-check-input" type="checkbox" />
+              </td>
+              <td>01 Jan 2045</td>
+              <td>INV-0123</td>
+              <td>Jhon Doe</td>
+              <td>$123</td>
+              <td>Paid</td>
+              <td>
+                <a class="btn btn-sm btn-primary" href="">Detail</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input class="form-check-input" type="checkbox" />
+              </td>
+              <td>01 Jan 2045</td>
+              <td>INV-0123</td>
+              <td>Jhon Doe</td>
+              <td>$123</td>
+              <td>Paid</td>
+              <td>
+                <a class="btn btn-sm btn-primary" href="">Detail</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input class="form-check-input" type="checkbox" />
+              </td>
+              <td>01 Jan 2045</td>
+              <td>INV-0123</td>
+              <td>Jhon Doe</td>
+              <td>$123</td>
+              <td>Paid</td>
+              <td>
+                <a class="btn btn-sm btn-primary" href="">Detail</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input class="form-check-input" type="checkbox" />
+              </td>
+              <td>01 Jan 2045</td>
+              <td>INV-0123</td>
+              <td>Jhon Doe</td>
+              <td>$123</td>
+              <td>Paid</td>
+              <td>
+                <a class="btn btn-sm btn-primary" href="">Detail</a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input class="form-check-input" type="checkbox" />
+              </td>
+              <td>01 Jan 2045</td>
+              <td>INV-0123</td>
+              <td>Jhon Doe</td>
+              <td>$123</td>
+              <td>Paid</td>
+              <td>
+                <a class="btn btn-sm btn-primary" href="">Detail</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- Recent Sales End --> {% endcomment %}
+
+  <!-- Widgets Start -->
+  <div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+      <div class="col-sm-12 col-md-6 col-xl-4">
+        <div class="h-100 bg-light rounded p-4">
+          <div class="d-flex align-items-center justify-content-between mb-2">
+            <h6 class="mb-0">Notice Board</h6>
+            <a href="{% url 'teacher:teacher_notice_list' %} ">Show All</a>
+          </div>
+          {% if latest_notice %}
+          
+              {% for notice in latest_notice %}
+              <div class="d-flex align-items-center border-bottom py-3">
+                <div class="w-100 ms-3">
+                  
+                  <div class="d-flex w-100 justify-content-between">
+                    <h6 class="mb-0"> {{notice.title}} </h6>
+                    <small>{{ notice.created_at|timesince }} ago</small>
+                  </div>
+                  <span>{{ notice.description|slice:":50" }}{% if notice.description|length > 50 %}...{% endif %}</span>
+                </div>
+              </div>
+                
+              {% endfor %}
+                
+                
+              {% endif %}
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-6 col-xl-4">
+        <div class="h-100 bg-light rounded p-4">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Calender</h6>
+            <a href="">Show All</a>
+          </div>
+          <div id="calender"></div>
+        </div>
+      </div>
+      {% comment %} <div class="col-sm-12 col-md-6 col-xl-4">
+        <div class="h-100 bg-light rounded p-4">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">To Do List</h6>
+            <a href="#">Show All</a>
+          </div>
+          <div class="d-flex mb-2">
+            <input id="taskInput" class="form-control bg-transparent" type="text" placeholder="Enter task" />
+            <button id="addTaskBtn" type="button" class="btn btn-primary ms-2">Add</button>
+          </div>
+          <div id="taskList">
+            <!-- Task items will be dynamically added here -->
+          </div>
+        </div>
+      </div> {% endcomment %}
+    </div>
+  </div>
+  <!-- Widgets End -->
+  <script>
+    function displayTime() {
+        var date = new Date();
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var seconds = date.getSeconds();
+        var ampm = hours >= 12 ? 'PM' : 'AM';
+    
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0'+minutes : minutes;
+        seconds = seconds < 10 ? '0'+seconds : seconds;
+    
+        var time = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+    
+        document.getElementById('clock').innerHTML = time;
+    
+        setTimeout(displayTime, 1000); // update every second
+    }
+    
+    displayTime();
+</script> 
+{% comment %} <script>
+  // Select elements
+  const taskInput = document.getElementById('taskInput');
+  const addTaskBtn = document.getElementById('addTaskBtn');
+  const taskList = document.getElementById('taskList');
+
+  // Add a task
+  function addTask() {
+    const taskText = taskInput.value.trim();
+    if (taskText === '') return alert('Please enter a task!');
+
+    // Create task element
+    const taskItem = document.createElement('div');
+    taskItem.className = 'd-flex align-items-center border-bottom py-2';
+
+    taskItem.innerHTML = `
+      <input class="form-check-input m-0" type="checkbox" onclick="toggleTask(this)" />
+      <div class="w-100 ms-3">
+        <div class="d-flex w-100 align-items-center justify-content-between">
+          <span>${taskText}</span>
+          <button class="btn btn-sm text-danger" onclick="deleteTask(this)"><i class="fa fa-times"></i></button>
+        </div>
+      </div>
+    `;
+
+    // Append task to the list
+    taskList.appendChild(taskItem);
+
+    // Clear input field
+    taskInput.value = '';
+  }
+
+  // Toggle task completion
+  function toggleTask(checkbox) {
+    const taskText = checkbox.nextElementSibling.querySelector('span');
+    if (checkbox.checked) {
+      taskText.innerHTML = `<del>${taskText.innerText}</del>`;
+    } else {
+      taskText.innerHTML = taskText.innerText; // Remove the <del> tag
+    }
+  }
+
+  // Delete a task
+  function deleteTask(button) {
+    const taskItem = button.closest('.d-flex');
+    taskList.removeChild(taskItem);
+  }
+
+  // Event listeners
+  addTaskBtn.addEventListener('click', addTask);
+  taskInput.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') addTask();
+  });
+</script> {% endcomment %}
+{% endblock body %}

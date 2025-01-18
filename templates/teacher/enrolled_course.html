@@ -60,6 +60,8 @@
                     <td>{{object.course_instructor.profile_of.name}}</td>
                     <td>
                         <a class="btn btn-success" href="{% url 'teacher:add_assignment' object.id %}" role="button"><i class="fa-solid fa-pen-to-square me-2"></i>Assignment</a>
+                        <a class="btn btn-success" href="{% url 'teacher:take_attendance' object.id %}" role="button"><i class="fa-solid fa-pen-to-square me-2"></i>Attendance</a>
+                        <a class="btn btn-success" href="{% url 'teacher:teacher_enrolled_student' object.id %}" role="button"><i class="fa-solid fa-eye me-2"></i>Stuent</a>
                     </td>
                   </tr>
                 {% endfor %}     

@@ -6,7 +6,9 @@ from apps.authority.models.course_model import (
     WeekDays,
     EnrolledStudent,
     Assignment,
+    Attendance,
 )
+from django.forms import DateInput
 
 
 class WeekDaysFilter(django_filters.FilterSet):
@@ -75,9 +77,7 @@ class EnrolledStudentFilter(django_filters.FilterSet):
         Filter the queryset by title or published status matching the query keyword.
         """
         return queryset.filter(
-            Q(enrolled_batch__course_instructor__name__icontains=value)
-            | Q(enrolled_batch__batch_name__icontains=value)
-            | Q(enrolled_student__student_user__name__icontains=value)
+            Q(enrolled_student__student_user__name__icontains=value)
             | Q(enrolled_student__student_user__username__icontains=value)
         )
 
@@ -97,4 +97,29 @@ class AssignmentFilter(django_filters.FilterSet):
         """
         return queryset.filter(
             Q(batch__batch_name__icontains=value) | Q(assignment_title__icontains=value)
+        )
+
+
+class AttendanceFilter(django_filters.FilterSet):
+    query = django_filters.CharFilter(method="filter_query", label="Search")
+    attendance_date = django_filters.DateFilter(
+        field_name="attendance_date",
+        widget=DateInput(attrs={"type": "date", "class": "form-control"}),
+    )
+
+    class Meta:
+        model = Attendance
+        fields = [
+            "query",
+            "attendance_date",
+        ]
+
+    def filter_query(self, queryset, name, value):
+        """
+        Filter the queryset by title or published status matching the query keyword.
+        """
+        return queryset.filter(
+            Q(batch__batch_name__icontains=value)
+            | Q(student__student_user__name__icontains=value)
+            | Q(student__student_user__username__icontains=value)
         )

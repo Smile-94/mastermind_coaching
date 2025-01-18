@@ -53,8 +53,7 @@ class UserLoginView(View):
             elif user is not None and request_user.user_type == UserTypeChoice.STUDENT:
                 login(request, user)
                 messages.success(request, "Welcome to your user panel")
-                # return HttpResponseRedirect(reverse("receptonist:receptonist"))
-                return HttpResponse("We are working on Student panel")
+                return HttpResponseRedirect(reverse("student:student_home"))
 
             elif user is not None and request_user.user_type == UserTypeChoice.TEACHER:
                 login(request, user)

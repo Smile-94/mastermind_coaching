@@ -104,7 +104,7 @@ class EnrolledStudent(DjangoBaseModel):
     )
 
     def __str__(self):
-        return f"{self.enrolled_batch}"
+        return f"{self.enrolled_batch}-({self.enrolled_student.student_user.name})"
 
 
 class Assignment(DjangoBaseModel):
@@ -120,7 +120,7 @@ class Assignment(DjangoBaseModel):
         verbose_name_plural = _("Assignment")
 
     def __str__(self):
-        return f"{self.batch}' assignment"
+        return f"{self.batch}- {self.assignment_title}"
 
 
 class SubmittedAssignment(DjangoBaseModel):
@@ -133,6 +133,37 @@ class SubmittedAssignment(DjangoBaseModel):
         on_delete=CASCADE,
     )
     upload_file = FileField(upload_to="assignment/", blank=True, null=True)
+    review_file = FileField(upload_to="assignment/", blank=True, null=True)
     is_graded = BooleanField(default=False, blank=True, null=True)
     grade = CharField(max_length=10, blank=True, null=True)
     description = TextField(blank=True, null=True)
+
+    class Meta(DjangoBaseModel.Meta):
+        ordering = ("-id",)
+        verbose_name = _("Submitted Assignment")
+        verbose_name_plural = _("Submitted Assignment")
+
+    def __str__(self):
+        return f"{self.assignment}-({self.submitted_student.enrolled_batch.batch_name})"
+
+
+class Attendance(DjangoBaseModel):
+    batch = ForeignKey(Batch, related_name="attendance_batch", on_delete=CASCADE)
+    student = ForeignKey(
+        StudentProfile, related_name="attendance_student", on_delete=CASCADE
+    )
+    attendance_date = DateField()
+    is_present = BooleanField(default=True)  # True for Present, False for Absent
+
+    class Meta:
+        unique_together = (
+            "batch",
+            "student",
+            "attendance_date",
+        )  # Prevent duplicate entries
+        verbose_name = _("Attendance")
+        verbose_name_plural = _("Attendance")
+
+    def __str__(self):
+        status = "Present" if self.is_present else "Absent"
+        return f"{self.student.student_user.name} - {self.batch.batch_name} ({status})"

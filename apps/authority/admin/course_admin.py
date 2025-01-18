@@ -12,6 +12,7 @@ from apps.authority.models.course_model import (
     EnrolledStudent,
     Assignment,
     SubmittedAssignment,
+    Attendance,
 )
 
 
@@ -138,5 +139,25 @@ class SubmittedAssignmentAdmin(ModelAdmin):
     search_fields = (
         "id",
         "assignment__assignment_title",
+    )
+    list_per_page = 50
+
+
+@register(Attendance)
+class AttendanceAdmin(ModelAdmin):
+    """
+    Admin interface for the Attendance model.
+    """
+
+    list_display = (
+        "id",
+        "attendance_date",
+        "student",
+        "is_present",
+    )
+    list_display_links = ("id",)
+    search_fields = (
+        "id",
+        "attendance_date",
     )
     list_per_page = 50

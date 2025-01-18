@@ -48,7 +48,7 @@
           <div class="d-flex align-items-center ms-4 mb-4">
             <div class="position-relative">
               
-              {% if request.user.teacher_profile %} 
+              {% if request.user.teacher_profile.profile_picture %} 
                 <img class="rounded-circle" src=" {{request.user.teacher_profile.profile_picture.url}} " alt="" style="width: 40px; height: 40px;" />
               {% else %}
                 <img class="rounded-circle" src="{% static 'img/user.jpg' %}" alt="" style="width: 40px; height: 40px;" />
@@ -81,7 +81,8 @@
             </div>
             <a href="{% url 'teacher:teacher_class_routine' %}" class="nav-item nav-link"><i class="fa fa-th me-2"></i>Class Routine</a>
             <a href="{% url 'teacher:teacher_course_enrollment' %}" class="nav-item nav-link"><i class="fa-solid fa-book me-2"></i>Enrolled Course</a>
-            <a href="{% url 'teacher:teacher_assignment_list' %}" class="nav-item nav-link"><i class="fa-solid fa-book me-2"></i>Assignment List</a>
+            <a href="{% url 'teacher:teacher_assignment_list' %}" class="nav-item nav-link"><i class="fa-solid fa-pen-nib me-2"></i>Assignment List</a>
+            <a href="{% url 'teacher:teacher_attendance_list' %}" class="nav-item nav-link"><i class="fa-solid fa-calendar-days me-2"></i>Attendance List</a>
           </div>
         </nav>
       </div>
@@ -97,8 +98,8 @@
             <div class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                 
-                {% if request.user.admin_profile %}
-                  <img class="rounded-circle me-lg-2" src=" {{request.user.admin_profile.profile_picture.url}} " alt="" style="width: 40px; height: 40px;" />
+                {% if request.user.teacher_profile.profile_picture %}
+                  <img class="rounded-circle me-lg-2" src=" {{request.user.teacher_profile.profile_picture.url}} " alt="" style="width: 40px; height: 40px;" />
                 {% else %}
                   <img class="rounded-circle me-lg-2" src="{% static 'img/user.jpg' %}" alt="" style="width: 40px; height: 40px;" />
                   

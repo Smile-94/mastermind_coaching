@@ -1,8 +1,23 @@
-from django.forms import ModelForm, DateField, DateInput, TimeField, TimeInput
+from django.forms import (
+    ModelForm,
+    DateField,
+    DateInput,
+    TimeField,
+    TimeInput,
+    CheckboxInput,
+    modelformset_factory,
+)
 from django.core.exceptions import ValidationError
 
 # models
-from apps.authority.models.course_model import Course, Batch, WeekDays, EnrolledStudent
+from apps.authority.models.course_model import (
+    Course,
+    Batch,
+    WeekDays,
+    EnrolledStudent,
+    SubmittedAssignment,
+    Attendance,
+)
 
 
 class WeekDaysForm(ModelForm):
@@ -72,3 +87,26 @@ class EnrolledStudentForm(ModelForm):
     class Meta:
         model = EnrolledStudent
         fields = ("enrolled_student",)
+
+
+class SubmittedAssignmentForm(ModelForm):
+    class Meta:
+        model = SubmittedAssignment
+        fields = "__all__"
+        exclude = ["assignment", "submitted_student"]
+
+
+class AttendanceForm(ModelForm):
+    class Meta:
+        model = Attendance
+        fields = ["is_present"]
+        widgets = {
+            "is_present": CheckboxInput(attrs={"class": "form-check-input"}),
+        }
+
+
+AttendanceFormSet = modelformset_factory(
+    Attendance,
+    form=AttendanceForm,
+    extra=0,  # No additional empty forms
+)

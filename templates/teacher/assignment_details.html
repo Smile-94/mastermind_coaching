@@ -10,6 +10,7 @@
 <!-- Recent Sales Start -->
 <div class="container-fluid pt-4 px-4">
     <div class="bg-light text-center rounded p-4">
+        
         <div class="d-flex align-items-center justify-content-between mb-4">
             <h5 class="mb-0">Assignment Details</h5>
         </div>
@@ -67,16 +68,97 @@
                         {% endif %}
                         <tr>
                             <td>Assignment Details</td>
-                            <td> {{object.description}} </td>
+                            <td>
+                                {% if object.description|length > 150 %}
+                                    <span class="short-description">
+                                        {{ object.description|slice:":150" }}...
+                                        <a href="#" onclick="toggleDescription(this); return false;">Read more</a>
+                                    </span>
+                                    <span class="full-description" style="display: none;">
+                                        {{ object.description }}
+                                        <a href="#" onclick="toggleDescription(this); return false;">Read less</a>
+                                    </span>
+                                {% else %}
+                                    {{ object.description }}
+                                {% endif %}
+                            </td>
                         </tr>   
                               
                          
                 </tbody>
             </table>
         </div>
-        {% endif %}    
+        {% endif %} 
+        <div class="d-flex align-items-center justify-content-between mt-4">
+            <h6 class="mb-0">Submitted Assignment</h6>
+        </div> 
+        
+        <table class="table table-striped table-hover mt-2 ">
+            <thead class="table-dark">
+                <tr>
+                  <th scope="col">Sl</th>
+                  <th scope="col">Student Name</th>
+                  <th scope="col">Student ID</th>
+                  <th scope="col">Submitted At</th>
+                  <th scope="col">Is Graded</th>
+                  <th scope="col">Uploaded File</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody> 
+                {% if submitted_assignment %} 
+                    {% for assignment in submitted_assignment %}
+                    <tr>
+                        <th scope="row">{{forloop.counter}}</th>
+                        <td> {{assignment.submitted_student.enrolled_student.student_user.name}} </td>
+                        <td> {{assignment.submitted_student.enrolled_student.student_user.username}}</td>
+                        <td>{{assignment.created_at}}</td>
+                        
+                        {% if assignment.is_graded %}
+                            <td>Yes</td>
+                        {% else %}
+                            <td>No</td>
+                        {% endif  %}
+                            
+                        
+                        {% if assignment.file %}
+                       
+                            <td> <a href="{{ assignment.file.url }}" target="_blank">Open File</a> </td>
+                          
+                        {% else %}
+                        
+                            <td> Not Added </td>
+                        
+                        {% endif %}
+                        
+                        <td>
+                            <a class="btn btn-success" href="{% url 'teacher:graded_submitted_assignment' assignment.pk %}" role="button"><i class="fa-solid fa-eye"></i></a>
+
+                        </td>
+                      </tr>
+                    {% endfor %}     
+                {% endif %}     
+          </table>  
     </div>
    
 </div>
+
+<script>
+    function toggleDescription(link) {
+        const shortDesc = link.parentElement.classList.contains("short-description");
+        const shortDescription = link.closest("td").querySelector(".short-description");
+        const fullDescription = link.closest("td").querySelector(".full-description");
+
+        if (shortDesc) {
+            // Show full description and hide short description
+            shortDescription.style.display = "none";
+            fullDescription.style.display = "inline";
+        } else {
+            // Show short description and hide full description
+            shortDescription.style.display = "inline";
+            fullDescription.style.display = "none";
+        }
+    }
+</script>
   
 {% endblock body %}

@@ -1,3 +1,5 @@
+from datetime import date
+
 # Permissions and Authorization
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -10,8 +12,12 @@ from django.views.generic import TemplateView
 # Models
 from apps.user.models import User
 from common.models import UserTypeChoice
-from apps.authority.models.notice_model import Notice, PublishedStatusChoice
-from apps.authority.models.course_model import Batch
+from apps.authority.models.notice_model import (
+    Notice,
+    PublishedStatusChoice,
+    NoticePublishedForChoice,
+)
+from apps.authority.models.course_model import Batch, Attendance
 
 
 # Create your views here.
@@ -28,12 +34,17 @@ class TeacherHomeView(LoginRequiredMixin, TeacherPassesTestMixin, TemplateView):
         context["total_course"] = Batch.objects.filter(
             course_instructor=teacher_profile, is_active=True
         ).count()
-        context["latest_students"] = User.objects.filter(
-            user_type=UserTypeChoice.TEACHER, is_active=True
-        ).order_by("-id")[:10]
+        context["total_present"] = Attendance.objects.filter(
+            batch__course_instructor=teacher_profile, attendance_date=date.today()
+        ).count()
         context["latest_notice"] = Notice.objects.exclude(
             published_status=PublishedStatusChoice.ARCHIVED
-        ).order_by("-id")[:10]
+        ).filter(
+            published_for__in=[
+                NoticePublishedForChoice.TEACHER,
+                NoticePublishedForChoice.ALL,
+            ]
+        )
         return context
 
 

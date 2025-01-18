@@ -1,0 +1,73 @@
+{% extends 'student/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block title %} {{title}} {% endblock title %}
+
+
+{% block body %}
+<!-- Recent Sales Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h5 class="mb-0">Notice Details</h5>
+        </div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                {% comment %} <a href="{% url 'report:onarivla_appointment_report' appointment.id %}" class="btn btn-sm btn-primary me-md-2" target="_blank" type="button"><i class="fa-solid fa-file-arrow-down"></i></a>
+                <a href="{% url 'report:onarivla_appointment_report' appointment.id %}" class="btn btn-sm btn-primary" target="_blank" type="button"><i class="fa-solid fa-print"></i></a> {% endcomment %}
+                <a class="btn btn-primary" href="{% url 'student:student_notice_list' %}" role="button">Back</a>    
+            </div>
+
+        {% if notice %}
+        <div class="d-flex align-items-center justify-content-between mb-2">
+            <h6 class="mb-0">Notice Details</h6>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="table-dark ">
+                        <th class="col-4" scope="col-4">Fields Name</th>
+                        <th class="col-8" scope="col-8">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <td> Title </td>
+                            <td> {{notice.title}}</td>
+                        </tr>  
+                        <tr>
+                            <td>Published For</td>
+                            <td> {{notice.published_for| title}} </td>
+                        </tr>    
+                        <tr>
+                            <td>Published Status</td>
+                            <td> {{notice.published_status|title}} </td>
+                        </tr>  
+                        
+                        {% if notice.file %}
+                        <tr>
+                            <td>File </td>
+                            <td> <a href="{{ notice.file.url }}" target="_blank">Open File</a> </td>
+                        </tr>   
+                        {% else %}
+                        <tr>
+                            <td>File </td>
+                            <td> Not Added </td>
+                        </tr>  
+                        {% endif %}
+                        <tr>
+                            <td>Notice Details</td>
+                            <td> {{notice.description}} </td>
+                        </tr>   
+                              
+                         
+                </tbody>
+            </table>
+        </div>
+        {% endif %}    
+    </div>
+   
+</div>
+  
+{% endblock body %}

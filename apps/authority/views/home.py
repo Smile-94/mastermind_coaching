@@ -1,5 +1,6 @@
 # Permissions and Authorization
 from django.contrib.auth.mixins import LoginRequiredMixin
+from datetime import date
 
 # custom UserpassTestMixin
 from apps.authority.permission.admin_permission import AdminPassesTestMixin
@@ -11,7 +12,7 @@ from django.views.generic import TemplateView
 from apps.user.models import User
 from common.models import UserTypeChoice
 from apps.authority.models.notice_model import Notice, PublishedStatusChoice
-from apps.authority.models.course_model import Batch
+from apps.authority.models.course_model import Batch, Attendance
 
 
 # Create your views here.
@@ -23,6 +24,9 @@ class AdminHomeView(LoginRequiredMixin, AdminPassesTestMixin, TemplateView):
         context["title"] = "Admin Panel"
         context["total_student"] = User.objects.filter(
             user_type=UserTypeChoice.STUDENT, is_active=True
+        ).count()
+        context["total_attendance"] = Attendance.objects.filter(
+            attendance_date=date.today()
         ).count()
         context["total_teacher"] = User.objects.filter(
             user_type=UserTypeChoice.TEACHER, is_active=True

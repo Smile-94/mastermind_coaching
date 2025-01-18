@@ -1,0 +1,52 @@
+{% extends 'teacher/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %} {{title}} {% endblock title %}
+
+{% block body %}
+<div class="bg-light rounded h-100 p-4">
+    <div class="row">
+        <div class="col-md-4">
+            <h6 class="mb-4">Take Attendance {{ batch.batch_name  }} {{batch.course.course_name}}({{batch.course.course_code}})- {{batch.student_class.class_name}} ({{ date }})</h6>
+        </div>
+    </div>
+    
+    {% if is_taken %}
+    <h4 class="mb-4">Today's Attendance Already Taken</h4>
+    {% else %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ formset.management_form }}  <!-- This will include the necessary hidden fields -->
+        
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Sl</th>
+                    <th scope="col">Student Name</th>
+                    <th scope="col">Student ID</th>
+                    <th scope="col">Batch</th>
+                    <th scope="col">Course</th>
+                    <th scope="col">Is Present</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for form in formset %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ form.instance.student.student_user.name }}</td>
+                        <td>{{ form.instance.student.student_user.username }}</td>
+                        <td>{{ form.instance.batch.batch_name|title }}</td>
+                        <td>{{ form.instance.batch.course.course_name|title }} (s)</td>
+                        <td>{{ form.is_present }}</td>
+                        <input type="hidden" name="form-0-id" value="{{ form.instance.id }}" id="id_form-0-id">
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <button type="submit" class="btn btn-primary">Submit Attendance</button>   
+    </form>
+    {% endif %}
+</div>
+{% endblock %}
